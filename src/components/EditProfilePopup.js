@@ -34,6 +34,7 @@ function EditProfilePopup(props) {
     <PopupWithForm
       name="profile"
       title="Редактировать профиль"
+      buttonText="Сохранить"
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}
@@ -68,12 +69,7 @@ function EditProfilePopup(props) {
         />
         <span id="about-profile-error" className="error"></span>
       </div>
-      <input
-        type="submit"
-        value="Сохранить"
-        name="submit"
-        className="popup__button popup__button_type_save"
-      />
+    
     </PopupWithForm>
   );
 }
