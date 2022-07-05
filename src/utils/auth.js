@@ -1,4 +1,4 @@
-const API_URL = "https://auth.nomoreparties.co";
+const API_URL = "http://api.kirillzhakin.mesto.nomoredomains.xyz/";
 
 export function register(email, password) {
   return fetch(`${API_URL}/signup`, {
