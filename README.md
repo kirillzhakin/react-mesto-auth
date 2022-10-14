@@ -1,27 +1,62 @@
-Заголовок-название: Проектная работа №12 "Место"
+# MESTO
 
-Ссылка на сайт: https://kirillzhakin.github.io/mesto/
+### Описание
 
-В этой проектной работе продолжили работу над проектом "Место" Create React App.
-Добавленны компоненты Register.js, Login.js, ProtectedRoute.js, InfoTooltip.js.
+Репозиторий для приложения проекта `Mesto`, включающий фронтенд часть приложения со следующими возможностями: авторизации и регистрации пользователей, операции с карточками и пользователями.
 
-Стили портированы.
+### Технологии
+![JavaScript](https://img.shields.io/badge/JavaScript-172F45?style=for-the-badge&logo=JavaScript)
+![REACT](https://img.shields.io/badge/React-172F45?style=for-the-badge&logo=react)
+![HTML](https://img.shields.io/badge/HTML-172F45?style=for-the-badge&logo=html5)
+![CSS](https://img.shields.io/badge/CSS-172F45?style=for-the-badge&logo=css3)
+![GIT](https://img.shields.io/badge/GIT-172F45?style=for-the-badge&logo=git)
 
-Сайт оптимизирован для просмотра на экранах от 320 пикселей до бесконечности. Выполнены всплывающие интерактивные окна Popup. Проведена работа над организацией кода. Использован экспорт/импорт классов. Стили портированы.
+## Ссылки
 
-Функциональность страницы:
+Репозиторий (frontend): [GitHub](https://github.com/kirillzhakin/react-mesto-auth)
 
-- Загрузка карточек и информации о пользователе с сервера
+Репозиторий (backend):[GitHub](https://github.com/kirillzhakin/react-mesto-api-full)
 
-В пректе используются технологии:
+Макет: [Figma](https://www.figma.com/file/5H3gsn5lIGPwzBPby9jAOo/JavaScript.-Sprint-12?node-id=0%3A1)
 
-- Grid Layout
-- Flexbox-вёрстка
-- Медиазапросы
-- Использование относительных величин при указании размеров блоков и элементов
-- Пути к файлам и организация файлов по БЭМ.
-- API
-- Create React App
+Ссылка на сайт: https://kirillzhakin.mesto.nomoredomains.xyz
 
-Планы по доработке проекта:
-Модернизировать сайт с помощью Create React App.
+# Планы по доработке
+
+- Доработать сайт для просмотра на экранах от 320 пикселей
+- Валидация форм
+- Закрытие по Esc, оверлею
+- Loading
+
+
+### Инструкция
+
+Чтобы запустить проект, нужно сделать несколько простых шагов.
+
+- Создайте папку и перейдите в неё:
+
+```
+cd <Имя-папки>
+```
+
+- Склонируйте этот репозиторий:
+
+```
+git clone https://github.com/kirillzhakin/react-mesto-auth
+```
+
+- Установите все зависимости:
+
+```
+yarn или npm install
+```
+
+- Теперь можете запустить проект:
+
+```
+npm start или yarn start
+```
+
+### Системные требования
+
+Для запуска потребуется Node.js версии 18

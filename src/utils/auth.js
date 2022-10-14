@@ -1,7 +1,7 @@
-const API_URL = "http://api.kirillzhakin.mesto.nomoredomains.xyz/";
+import { API_URL } from "../utils/constants.js";
 
 export function register(email, password) {
-  return fetch(`${API_URL}/signup`, {
+  return fetch(`${API_URL}signup`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -12,18 +12,18 @@ export function register(email, password) {
 }
 
 export function login(email, password) {
-  return fetch(`${API_URL}/signin`, {
+  return fetch(`${API_URL}signin`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ email, password }),
-  }).then(checkResponse);
+  }).then(checkResponse)
 }
 
 export function checkToken(token) {
-  return fetch(`${API_URL}/users/me`, {
+  return fetch(`${API_URL}users/me`, {
     method: "GET",
     headers: {
       Accept: "application/json",

@@ -4,15 +4,15 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Card(props) {
   const currentUser = useContext(CurrentUserContext);
-
+  
   const card = {
     link: props.link,
     name: props.name,
-    ownerId: props.owner._id,
+    ownerId: props.owner,
     likes: props.likes,
     cardId: props._id,
   };
-
+ 
   function handleClick() {
     props.onCardClick(card);
   }
@@ -30,7 +30,7 @@ function Card(props) {
     isOwn ? "element__trash_block" : ""
   }`;
 
-  const isLiked = card.likes.some((i) => i._id === currentUser._id);
+  const isLiked = card.likes.some((id) => id === currentUser._id);
   const cardLikeButtonClassName = `element__heart ${
     isLiked ? "element__heart_active" : ""
   }`;

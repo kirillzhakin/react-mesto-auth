@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 
 import Layout from "./Layout";
 import Main from "./Main";
@@ -21,6 +21,7 @@ function App() {
   const [userData, setUserData] = useState({ email: "" });
   const [isSuccessSignUp, setIsSuccessSignUp] = useState(false);
   const navigate = useNavigate();
+  let location = useLocation();
 
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -33,17 +34,7 @@ function App() {
   });
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([userData, cardsData]) => {
-        setCurrentUser(userData);
-        setCards(cardsData);
-      })
-      .catch((err) => {
-        console.log(`${err}`);
-      });
-  }, []);
+  const token = localStorage.getItem("token");
 
   //Токен
   useEffect(() => {
@@ -51,10 +42,10 @@ function App() {
     if (token) {
       auth
         .checkToken(token)
-        .then((response) => {
-          setUserData({ email: response.data.email });
+        .then((res) => {
+          setUserData({ email: res.email });
           setIsLoggedIn(true);
-          navigate("/");
+          navigate(location.pathname, { replace: true });
         })
         .catch((err) => {
           console.log(`${err}`);
@@ -62,15 +53,29 @@ function App() {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      Promise.all([api.getUserInfo(token), api.getInitialCards(token)])
+        .then(([userData, cards]) => {
+          setCurrentUser(userData);
+          setCards(cards.reverse());
+        })
+        .catch((err) => {
+          console.log(`${err}`);
+        });
+    }
+  }, [isLoggedIn, token]);
+
   //Регистрация
   function handleRegister({ email, password }) {
     auth
       .register(email, password)
-      .then((response) => {
-        setUserData({ email: response.email });
-        setIsSuccessSignUp(true);
-        handleInfoTooltipPopupOpen();
-        navigate("/sign-in");
+      .then((res) => {
+        if (res) {
+          setIsSuccessSignUp(true);
+          handleInfoTooltipPopupOpen();
+          navigate("/sign-in");
+        }
       })
       .catch((err) => {
         console.log(`${err}`);
@@ -83,11 +88,14 @@ function App() {
   function handleLogin({ email, password }) {
     auth
       .login(email, password)
-      .then((response) => {
-        if (response.token) {
-          localStorage.setItem("token", response.token);
+      .then((res) => {
+        console.log(`вход 1`, res);
+        if (res.token) {
+          setUserData({ email: res.email });
+          localStorage.setItem("token", res.token);
           setIsLoggedIn(true);
           navigate("/");
+          return res.token;
         }
       })
       .catch((err) => {
@@ -104,10 +112,11 @@ function App() {
 
   //Поддержка лайков и дизлайков
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    console.log("card", card);
+    const isLiked = card.likes.some((id) => id === currentUser._id);
     if (isLiked) {
       api
-        .dislikeCard(card.cardId, !isLiked)
+        .dislikeCard(card.cardId, token, !isLiked)
         .then((newCard) => {
           setCards((state) =>
             state.map((c) => (c._id === card.cardId ? newCard : c))
@@ -118,7 +127,7 @@ function App() {
         });
     } else {
       api
-        .likeCard(card.cardId, !isLiked)
+        .likeCard(card.cardId, token, !isLiked)
         .then((newCard) => {
           setCards((state) =>
             state.map((c) => (c._id === card.cardId ? newCard : c))
@@ -132,13 +141,9 @@ function App() {
   //Удаление карточки
   function handleCardDelete(card) {
     api
-      .deleteCard(card.cardId)
+      .deleteCard(card.cardId, token)
       .then(() => {
-        setCards((state) =>
-          state.filter((c) => {
-            return c._id !== card.cardId;
-          })
-        );
+        setCards((state) => state.filter((c) => c._id !== card.cardId));
       })
       .catch((err) => {
         console.log(`${err}`);
@@ -148,7 +153,7 @@ function App() {
   //Редактирование профиля
   function handleUpdateUser(userData) {
     api
-      .setUserInfo(userData)
+      .setUserInfo(userData, token)
       .then((name, about) => {
         setCurrentUser(name, about);
       })
@@ -161,9 +166,9 @@ function App() {
   }
 
   //Аватар
-  function handleUpdateAvatar(data) {
+  function handleUpdateAvatar(userData) {
     api
-      .setAvatar(data)
+      .setAvatar(userData, token)
       .then((avatar) => {
         setCurrentUser(avatar);
       })
@@ -178,7 +183,7 @@ function App() {
   //Добавить карточку
   function handleAddPlaceSubmit(data) {
     api
-      .createCard(data)
+      .createCard(data, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
       })
