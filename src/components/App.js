@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 
 import Layout from "./Layout";
 import Main from "./Main";
@@ -51,12 +57,13 @@ function App() {
           console.log(`${err}`);
         });
     }
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
       Promise.all([api.getUserInfo(token), api.getInitialCards(token)])
         .then(([userData, cards]) => {
+          setUserData({ email: userData.email });
           setCurrentUser(userData);
           setCards(cards.reverse());
         })
@@ -253,9 +260,24 @@ function App() {
             />
             <Route
               path="sign-up"
-              element={<Register onRegister={handleRegister} />}
+              element={
+                isLoggedIn ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Register onRegister={handleRegister} />
+                )
+              }
             />
-            <Route path="sign-in" element={<Login onLogin={handleLogin} />} />
+            <Route
+              path="sign-in"
+              element={
+                isLoggedIn ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Login onLogin={handleLogin} />
+                )
+              }
+            />
             <Route path="*" element={<Error />} />
           </Route>
         </Routes>
