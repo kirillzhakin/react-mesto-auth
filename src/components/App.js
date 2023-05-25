@@ -119,7 +119,6 @@ function App() {
 
   //Поддержка лайков и дизлайков
   function handleCardLike(card) {
-    console.log("card", card);
     const isLiked = card.likes.some((id) => id === currentUser._id);
     if (isLiked) {
       api

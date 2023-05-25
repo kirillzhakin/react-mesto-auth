@@ -51,6 +51,7 @@ class Api {
         Accept: "application/json",
         authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
+        
       },
       body: JSON.stringify({
         name: newCard.name,
